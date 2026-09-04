@@ -3,421 +3,1871 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ReelCraft - AI Content Repurposer</title>
+  <title>ReelCraft AI — Audio & Podcast to Viral Reel Engine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #0f0c20;
-      --bg-card: rgba(23, 19, 47, 0.7);
-      --bg-card-hover: rgba(33, 27, 66, 0.8);
-      --border-color: rgba(255, 255, 255, 0.1);
-      --primary-grad: linear-gradient(135deg, #8a2387, #e94057, #f27121);
-      --accent-purple: #9d4edd;
-      --accent-pink: #e94057;
-      --text-main: #f8f9fa;
-      --text-muted: #a0a5ba;
-      --sidebar-width: 260px;
+      --bg-main: #090a10;
+      --bg-surface: #121420;
+      --bg-surface-elevated: #1a1e30;
+      --bg-input: #0c0e17;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(139, 92, 246, 0.5);
+      --accent-purple: #8b5cf6;
+      --accent-pink: #ec4899;
+      --accent-cyan: #06b6d4;
+      --accent-amber: #f59e0b;
+      --accent-green: #10b981;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --primary-gradient: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #06b6d4 100%);
+      --glass: rgba(18, 20, 32, 0.75);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Outfit', sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
-      background-color: var(--bg-dark);
+      background-color: var(--bg-main);
       color: var(--text-main);
-      display: flex;
       height: 100vh;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
       background-image: 
-        radial-gradient(circle at 10% 20%, rgba(138, 35, 135, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(242, 113, 33, 0.15) 0%, transparent 40%);
+        radial-gradient(ellipse at 15% 10%, rgba(139, 92, 246, 0.15), transparent 45%),
+        radial-gradient(ellipse at 85% 90%, rgba(236, 72, 153, 0.12), transparent 45%),
+        radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.05), transparent 60%);
     }
 
-    /* Sidebar */
-    aside {
-      width: var(--sidebar-width);
-      border-right: 1px solid var(--border-color);
-      padding: 24px 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: rgba(15, 12, 32, 0.5);
-      backdrop-filter: blur(10px);
-    }
-
-    .brand {
+    /* Top Bar */
+    header {
+      height: 64px;
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      border-bottom: var(--glass-border);
+      padding: 0 24px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 1.25rem;
-      font-weight: 800;
-      background: var(--primary-grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 32px;
-      padding: 0 8px;
+      justify-content: space-between;
+      z-index: 50;
+      flex-shrink: 0;
     }
 
-    .nav-list {
-      list-style: none;
+    .brand-group {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(236, 72, 153, 0.35);
+    }
+
+    .brand-logo svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge-pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(139, 92, 246, 0.2);
+      color: #c4b5fd;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .presets-row {
+      display: flex;
+      align-items: center;
       gap: 8px;
     }
 
-    .nav-item {
-      padding: 12px 16px;
-      border-radius: 12px;
+    .preset-chip {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
       color: var(--text-muted);
+      font-size: 0.78rem;
       font-weight: 600;
-      font-size: 0.95rem;
+      padding: 6px 12px;
+      border-radius: 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 6px;
       transition: all 0.2s ease;
     }
 
-    .nav-item:hover, .nav-item.active {
+    .preset-chip:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .preset-chip.active {
+      background: rgba(236, 72, 153, 0.15);
+      border-color: var(--accent-pink);
+      color: #fbcfe8;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 9px 18px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface-elevated);
       color: var(--text-main);
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border-subtle);
     }
 
-    .nav-item.active {
-      border-color: rgba(233, 64, 87, 0.4);
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
     }
 
-    /* Main Area */
-    main {
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 4px 18px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(236, 72, 153, 0.5);
+    }
+
+    /* Studio 3-Column Layout */
+    .studio-container {
+      display: grid;
+      grid-template-columns: 360px 1fr 340px;
       flex: 1;
+      overflow: hidden;
+    }
+
+    /* Left Column: AI Pipeline & Asset Matcher */
+    .left-panel {
+      background: rgba(14, 16, 26, 0.8);
+      border-right: var(--glass-border);
       display: flex;
       flex-direction: column;
       overflow-y: auto;
+      padding: 20px;
+      gap: 20px;
     }
 
-    header {
-      padding: 24px 36px;
+    .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-color);
     }
 
-    .header-title h1 {
-      font-size: 1.5rem;
+    .section-title {
+      font-size: 0.85rem;
       font-weight: 700;
-    }
-
-    .header-title p {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: var(--text-muted);
-      font-size: 0.875rem;
-      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .btn-gradient {
-      background: var(--primary-grad);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(233, 64, 87, 0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .btn-gradient:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(233, 64, 87, 0.4);
-    }
-
-    .content-area {
-      padding: 36px;
+    /* Modes Switcher */
+    .mode-tabs {
       display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 32px;
+      grid-template-columns: 1fr 1fr;
+      background: var(--bg-input);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      gap: 4px;
     }
 
-    /* Upload Box */
-    .upload-container {
-      background: var(--bg-card);
-      border: 2px dashed rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      padding: 40px;
+    .mode-tab {
+      padding: 8px 10px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: transparent;
+    }
+
+    .mode-tab.active {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Ingestion Box */
+    .drop-zone {
+      border: 2px dashed rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      padding: 24px 16px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       position: relative;
     }
 
-    .upload-container:hover {
+    .drop-zone:hover {
       border-color: var(--accent-pink);
-      background: var(--bg-card-hover);
+      background: rgba(236, 72, 153, 0.05);
     }
 
-    .upload-icon {
-      width: 64px;
-      height: 64px;
-      background: rgba(233, 64, 87, 0.1);
+    .drop-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--accent-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drop-zone h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .drop-zone p {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .url-input-wrap {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .input-field {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent-purple);
+    }
+
+    /* AI Detection Match Card */
+    .ai-match-card {
+      background: var(--bg-surface);
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-match-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary-gradient);
+    }
+
+    .match-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .match-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .match-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .match-badge {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+
+    .matched-entities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .entity-tag {
+      background: var(--bg-surface-elevated);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .entity-tag strong {
+      color: var(--accent-cyan);
+    }
+
+    /* Matched B-Roll Clips Pool */
+    .b-roll-pool {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .b-roll-clip-item {
+      display: grid;
+      grid-template-columns: 60px 1fr 30px;
+      gap: 10px;
+      align-items: center;
+      background: var(--bg-surface-elevated);
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      transition: all 0.2s;
+    }
+
+    .b-roll-clip-item:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .clip-thumb {
+      width: 60px;
+      height: 44px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #999;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .clip-thumb-gradient-1 { background: linear-gradient(45deg, #1e1b4b, #4338ca); }
+    .clip-thumb-gradient-2 { background: linear-gradient(45deg, #311042, #701a75); }
+    .clip-thumb-gradient-3 { background: linear-gradient(45deg, #042f2e, #0f766e); }
+
+    .clip-info h5 {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .clip-info span {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    .clip-toggle input {
+      accent-color: var(--accent-pink);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    /* Center Panel: Stage & Timeline */
+    .center-stage {
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at center, #141728 0%, #0b0d16 100%);
+      padding: 20px;
+      overflow: hidden;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* 9:16 Video Player Container */
+    .canvas-viewport {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 0;
+      position: relative;
+    }
+
+    .phone-mockup {
+      width: 290px;
+      height: 515px;
+      background: #000;
+      border-radius: 36px;
+      border: 8px solid #23273e;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 
+        0 25px 60px -15px rgba(0, 0, 0, 0.9),
+        0 0 40px rgba(139, 92, 246, 0.15);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Notch */
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 18px;
+      background: #23273e;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      z-index: 30;
+    }
+
+    #reelCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: #000;
+    }
+
+    /* Floating Canvas Overlay UI */
+    .reel-ui-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 14px 20px;
+      z-index: 25;
+    }
+
+    .reel-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .reel-sound-pill {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.68rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .reel-side-actions {
+      align-self: flex-end;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .side-icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(0, 0, 0, 0.5);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 16px;
-      color: var(--accent-pink);
+      color: #fff;
+      font-size: 0.75rem;
+      backdrop-filter: blur(6px);
     }
 
-    .upload-container h3 {
-      font-size: 1.1rem;
-      margin-bottom: 8px;
+    .side-stat {
+      font-size: 0.65rem;
+      color: #fff;
+      font-weight: 600;
+      margin-top: 2px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
     }
 
-    .upload-container p {
+    /* Player Controls Bar */
+    .stage-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-surface);
+      padding: 10px 20px;
+      border-radius: 30px;
+      border: var(--glass-border);
+      margin: 12px 0;
+    }
+
+    .play-toggle-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      border: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(236, 72, 153, 0.4);
+      transition: transform 0.15s;
+    }
+
+    .play-toggle-btn:hover {
+      transform: scale(1.06);
+    }
+
+    .time-counter {
+      font-size: 0.8rem;
+      font-weight: 600;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-variant-numeric: tabular-nums;
     }
 
-    /* Form Options */
-    .options-section {
-      margin-top: 28px;
+    .layout-switcher {
+      display: flex;
+      background: var(--bg-input);
+      border-radius: 8px;
+      padding: 2px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .layout-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .layout-btn.active {
+      background: var(--accent-purple);
+      color: #fff;
+    }
+
+    /* Dynamic Timeline */
+    .timeline-dock {
+      width: 100%;
+      max-width: 780px;
+      background: var(--bg-surface);
+      border: var(--glass-border);
+      border-radius: 16px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .timeline-tracks {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .track-row {
+      height: 28px;
+      border-radius: 6px;
+      background: var(--bg-input);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .track-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      width: 75px;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+
+    .track-content {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Blocks inside tracks */
+    .segment-block {
+      position: absolute;
+      height: 80%;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .segment-audio {
+      left: 0%;
+      width: 100%;
+      background: linear-gradient(90deg, #3730a3, #4338ca);
+      border: 1px solid #6366f1;
+    }
+
+    .segment-broll-1 { left: 0%; width: 35%; background: rgba(236, 72, 153, 0.4); border: 1px solid var(--accent-pink); }
+    .segment-broll-2 { left: 35%; width: 38%; background: rgba(6, 182, 212, 0.4); border: 1px solid var(--accent-cyan); }
+    .segment-broll-3 { left: 73%; width: 27%; background: rgba(245, 158, 11, 0.4); border: 1px solid var(--accent-amber); }
+
+    .segment-hook { left: 0%; width: 28%; background: rgba(16, 185, 129, 0.4); border: 1px solid var(--accent-green); }
+    .segment-caption-flow { left: 28%; width: 72%; background: rgba(139, 92, 246, 0.35); border: 1px solid var(--accent-purple); }
+
+    /* Scrubber Needle */
+    .scrubber-playhead {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 15%;
+      width: 2px;
+      background: #ff3366;
+      box-shadow: 0 0 8px #ff3366;
+      z-index: 10;
+      pointer-events: none;
+      transition: left 0.1s linear;
+    }
+
+    .scrubber-playhead::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ff3366;
+    }
+
+    /* Right Panel: Growth & Caption Engine */
+    .right-panel {
+      background: rgba(14, 16, 26, 0.8);
+      border-left: var(--glass-border);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+    }
+
+    .growth-score-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.15));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .score-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent-pink) 0% 92%, rgba(255, 255, 255, 0.1) 92% 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .score-circle-inner {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-value {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .growth-factors {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .growth-factors h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .growth-factors p {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Style Selector for Captions */
+    .caption-style-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .caption-style-card {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 10px 6px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .caption-style-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .caption-style-card.active {
+      background: rgba(236, 72, 153, 0.15);
+      border-color: var(--accent-pink);
+      color: #fff;
+    }
+
+    /* Marketing Copy Box */
+    .caption-box {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .caption-text-area {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 0.8rem;
+      line-height: 1.4;
+      resize: none;
+      outline: none;
+      height: 120px;
+    }
+
+    .copy-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .hashtag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .hashtag-tag {
+      font-size: 0.7rem;
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Modal / Render Toast */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      width: 90%;
+      max-width: 480px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .modal-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--accent-pink);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
     }
 
-    .form-group label {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--text-muted);
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
-    select, input[type="text"] {
+    .progress-track {
       width: 100%;
-      padding: 12px 16px;
-      background: rgba(15, 12, 32, 0.8);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      color: var(--text-main);
-      outline: none;
-    }
-
-    select:focus, input[type="text"]:focus {
-      border-color: var(--accent-pink);
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    /* Preview Sidebar */
-    .preview-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .phone-frame {
-      width: 100%;
-      height: 480px;
-      background: #000;
-      border-radius: 24px;
-      border: 4px solid #2d2b42;
-      position: relative;
+      height: 8px;
+      background: var(--bg-input);
+      border-radius: 99px;
       overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: var(--primary-gradient);
+      transition: width 0.3s ease;
+    }
+
+    /* Notification Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--accent-green);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      font-size: 0.85rem;
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 10px;
+      z-index: 200;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .phone-overlay {
-      position: absolute;
-      bottom: 20px;
-      left: 16px;
-      right: 16px;
-      z-index: 2;
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
     }
 
-    .caption-preview {
-      font-size: 0.8rem;
-      line-height: 1.3;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
-      padding: 8px 12px;
-      border-radius: 8px;
-      border-left: 3px solid var(--accent-pink);
-    }
-
-    .stats-card {
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 12px;
-      padding: 12px;
-      display: flex;
-      justify-content: space-between;
-      text-align: center;
-    }
-
-    .stat-item h4 {
-      font-size: 1.1rem;
-      color: var(--accent-pink);
-    }
-
-    .stat-item span {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    #file-input {
-      display: none;
+    /* Responsive Adaptations */
+    @media (max-width: 1100px) {
+      .studio-container {
+        grid-template-columns: 320px 1fr;
+      }
+      .right-panel {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
 
-  <aside>
-    <div>
-      <div class="brand">
-        <span>⚡ ReelCraft</span>
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="brand-group">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
       </div>
-      <ul class="nav-list">
-        <li class="nav-item active"><span>🎬</span> Studio</li>
-        <li class="nav-item"><span>📊</span> Analytics</li>
-        <li class="nav-item"><span>🚀</span> Auto-Scheduler</li>
-        <li class="nav-item"><span>⚙️</span> Settings</li>
-      </ul>
-    </div>
-    <div style="font-size: 0.8rem; color: var(--text-muted); padding: 0 8px;">
-      Pro Plan • 12/50 Credits
-    </div>
-  </aside>
-
-  <main>
-    <header>
-      <div class="header-title">
-        <h1>Create Instagram Reel</h1>
-        <p>Turn long-form videos & podcasts into high-performing short clips</p>
-      </div>
-      <button class="btn-gradient" id="generate-btn">Generate Content</button>
-    </header>
-
-    <div class="content-area">
       <div>
-        <div class="upload-container" id="drop-zone" onclick="document.getElementById('file-input').click()">
-          <div class="upload-icon">
-            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-          </div>
-          <h3 id="upload-label">Drop video or audio file here</h3>
-          <p>Supports MP4, MP3, MOV (Max 500MB)</p>
-          <input type="file" id="file-input" accept="video/*,audio/*" onchange="handleFileSelect(event)">
-        </div>
-
-        <div class="options-section">
-          <div class="grid-2">
-            <div class="form-group">
-              <label>Target Audience / Tone</label>
-              <select>
-                <option>Educational & Professional</option>
-                <option>High Energy & Hype</option>
-                <option>Casual & Relatable</option>
-                <option>Storytelling & Deep</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Aspect Ratio</label>
-              <select>
-                <option>9:16 (Reels, TikTok, Shorts)</option>
-                <option>1:1 (Square Feed)</option>
-                <option>16:9 (Landscape Output)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Auto-Caption Style</label>
-            <select id="caption-style" onchange="updatePreview()">
-              <option value="pop">Bold Pop-up (Alex Hormozi Style)</option>
-              <option value="minimal">Minimal Subtitles</option>
-              <option value="gradient">Gradient Highlight</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Hook Focus (Topic or Keywords)</label>
-            <input type="text" placeholder="e.g. How to grow on Instagram, 3 marketing hacks" id="hook-input" oninput="updatePreview()">
-          </div>
-        </div>
+        <div class="brand-title">ReelCraft AI</div>
       </div>
+      <span class="badge-pill">v2.4 Viral Matcher</span>
+    </div>
 
-      <div class="preview-card">
-        <h3>Live AI Preview</h3>
-        <div class="phone-frame">
-          <div style="color: var(--text-muted); font-size: 0.85rem;" id="video-placeholder">
-            Upload media to preview render
-          </div>
-          <div class="phone-overlay">
-            <div class="caption-preview" id="preview-text">
-              "Stop making this <b>#1 marketing mistake</b> if you want to grow!"
-            </div>
-          </div>
-        </div>
-
-        <div class="stats-card">
-          <div class="stat-item">
-            <h4>88%</h4>
-            <span>Viral Score</span>
-          </div>
-          <div class="stat-item">
-            <h4>15s</h4>
-            <span>Est. Length</span>
-          </div>
-          <div class="stat-item">
-            <h4>High</h4>
-            <span>Hook Strength</span>
-          </div>
-        </div>
+    <!-- Quick preset triggers -->
+    <div class="presets-row">
+      <span style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Try Viral Presets:</span>
+      <div class="preset-chip active" onclick="loadPreset('movie')">
+        🎬 Movie Podcast (Interstellar)
+      </div>
+      <div class="preset-chip" onclick="loadPreset('song')">
+        🎵 Song Beat Sync (Synthwave)
+      </div>
+      <div class="preset-chip" onclick="loadPreset('biz')">
+        💡 Creator Interview (MrBeast)
       </div>
     </div>
-  </main>
+
+    <div class="top-actions">
+      <button class="btn btn-secondary" onclick="triggerAnalyze()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        Re-Scan Audio
+      </button>
+      <button class="btn btn-primary" onclick="openExportModal()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        Render 9:16 Reel
+      </button>
+    </div>
+  </header>
+
+  <!-- 3-Pane Studio Container -->
+  <div class="studio-container">
+
+    <!-- LEFT PANEL: Ingestion & Smart Matcher -->
+    <aside class="left-panel">
+      <!-- Mode Toggle -->
+      <div class="mode-tabs">
+        <button class="mode-tab active" id="tabPodcast" onclick="switchMode('podcast')">🎙️ Podcast & Topics</button>
+        <button class="mode-tab" id="tabSong" onclick="switchMode('song')">🎵 Song & Music Video</button>
+      </div>
+
+      <!-- Upload / Audio input -->
+      <div>
+        <div class="section-title" style="margin-bottom: 8px;">1. Ingest Media</div>
+        <div class="drop-zone" onclick="document.getElementById('hiddenFileInput').click()">
+          <div class="drop-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+          </div>
+          <h4 id="fileUploadName">Upload Audio or Video File</h4>
+          <p>MP3, WAV, MP4, Podcast link or Song stem</p>
+          <input type="file" id="hiddenFileInput" style="display:none" accept="audio/*,video/*" onchange="handleFileUpload(event)">
+        </div>
+
+        <div class="url-input-wrap">
+          <input type="text" class="input-field" placeholder="Or paste YouTube / Spotify / Podcast URL..." id="externalUrl">
+          <button class="btn btn-secondary" style="padding: 0 14px;" onclick="fetchFromUrl()">Import</button>
+        </div>
+      </div>
+
+      <!-- AI Recognition Results -->
+      <div>
+        <div class="section-header" style="margin-bottom: 8px;">
+          <div class="section-title">2. AI Audio Recognition</div>
+          <span class="match-badge" id="confidenceBadge">99.2% Match</span>
+        </div>
+
+        <div class="ai-match-card">
+          <div class="match-header">
+            <div>
+              <div class="match-title" id="detectedTitle">Topic: Interstellar Docking Scene</div>
+              <div class="match-sub" id="detectedArtistOrSpeaker">Context: Film Talk • Nolan & Hans Zimmer</div>
+            </div>
+            <div style="font-size: 1.2rem;" id="modeIcon">🚀</div>
+          </div>
+
+          <div class="matched-entities" id="entityList">
+            <span class="entity-tag">Entity: <strong>Interstellar (2014)</strong></span>
+            <span class="entity-tag">BPM: <strong>112 (Dramatic Surge)</strong></span>
+            <span class="entity-tag">Peak Emotion: <strong>Tension (0:09)</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auto-Retrieved B-Roll & Visual Clips Pool -->
+      <div style="flex: 1;">
+        <div class="section-header" style="margin-bottom: 8px;">
+          <div class="section-title">3. Matched Visual Clips</div>
+          <span style="font-size: 0.72rem; color: var(--accent-pink); font-weight: 700;">Auto-Synced</span>
+        </div>
+
+        <div class="b-roll-pool" id="brollList">
+          <!-- Populated dynamically via JS based on mode -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER PANEL: 9:16 Reel Player & Timeline -->
+    <main class="center-stage">
+      
+      <!-- Top controls & Viewport -->
+      <div class="canvas-viewport">
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          
+          <!-- Live Animated Canvas -->
+          <canvas id="reelCanvas" width="540" height="960"></canvas>
+
+          <!-- Native-looking Reel UI Overlay -->
+          <div class="reel-ui-overlay">
+            <div class="reel-top-row">
+              <div class="reel-sound-pill" id="soundPillText">
+                <span>🎵</span> Original Audio • AutoSync AI
+              </div>
+              <div style="color: #fff; font-size: 0.8rem; font-weight:700;">9:16 HD</div>
+            </div>
+
+            <div class="reel-side-actions">
+              <div>
+                <div class="side-icon">❤️</div>
+                <div class="side-stat">42.8k</div>
+              </div>
+              <div>
+                <div class="side-icon">💬</div>
+                <div class="side-stat">1,240</div>
+              </div>
+              <div>
+                <div class="side-icon">🚀</div>
+                <div class="side-stat">Share</div>
+              </div>
+              <div>
+                <div class="side-icon">🎵</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage Scrubber & Layout bar -->
+      <div class="stage-controls">
+        <button class="play-toggle-btn" id="playBtn" onclick="togglePlay()">
+          <svg id="playIcon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+        </button>
+
+        <div class="time-counter" id="timeCounter">00:03 / 00:15</div>
+
+        <div class="layout-switcher">
+          <button class="layout-btn active" id="layoutSplit" onclick="setLayout('split')">Split 50/50</button>
+          <button class="layout-btn" id="layoutPip" onclick="setLayout('pip')">B-Roll PiP</button>
+          <button class="layout-btn" id="layoutFull" onclick="setLayout('full')">Full B-Roll</button>
+        </div>
+      </div>
+
+      <!-- Multi-Track Dynamic Timeline -->
+      <div class="timeline-dock">
+        <div class="timeline-header">
+          <span>Multi-Layer Beat & Semantic Timeline</span>
+          <span id="timelineBpmLabel">112 BPM • 4 Auto Cuts</span>
+        </div>
+
+        <div class="timeline-tracks" id="timelineTrackArea" onclick="seekTimeline(event)">
+          <!-- Scrubber playhead line -->
+          <div class="scrubber-playhead" id="playhead"></div>
+
+          <!-- Track 1: Voice / Audio -->
+          <div class="track-row">
+            <span class="track-label">Voice/Track</span>
+            <div class="track-content">
+              <div class="segment-block segment-audio">🎙️ Main Voice / Track Peak Analysis</div>
+            </div>
+          </div>
+
+          <!-- Track 2: Matched B-roll Cuts -->
+          <div class="track-row">
+            <span class="track-label">Matched Clips</span>
+            <div class="track-content" id="timelineBrollBlocks">
+              <div class="segment-block segment-broll-1">Clip 1: Spinning Craft</div>
+              <div class="segment-block segment-broll-2">Clip 2: Docking Target</div>
+              <div class="segment-block segment-broll-3">Clip 3: Thrusters Fire</div>
+            </div>
+          </div>
+
+          <!-- Track 3: Dynamic Captions & Hook -->
+          <div class="track-row">
+            <span class="track-label">Captions</span>
+            <div class="track-content">
+              <div class="segment-block segment-hook">🔥 Viral Hook</div>
+              <div class="segment-block segment-caption-flow">Karaoke Word-by-Word Highlight</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- RIGHT PANEL: Growth Studio & Caption Engine -->
+    <aside class="right-panel">
+      <!-- Viral Score Meter -->
+      <div class="growth-score-card">
+        <div class="score-circle">
+          <div class="score-circle-inner">
+            <span class="score-value">94</span>
+          </div>
+        </div>
+        <div class="growth-factors">
+          <h4>Viral Retention Potential</h4>
+          <p>• High-velocity 2.8s B-roll pacing</p>
+          <p>• Verified trending audio topic</p>
+          <p>• Strong emotional 3s video hook</p>
+        </div>
+      </div>
+
+      <!-- Caption Style Selector -->
+      <div>
+        <div class="section-title" style="margin-bottom: 8px;">Auto-Caption Template</div>
+        <div class="caption-style-grid">
+          <div class="caption-style-card active" onclick="setCaptionStyle('hormozi')">
+            🟡 Hormozi Pop
+          </div>
+          <div class="caption-style-card" onclick="setCaptionStyle('neon')">
+            🟣 Cyber Neon
+          </div>
+          <div class="caption-style-card" onclick="setCaptionStyle('clean')">
+            ⚪ Minimal Box
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Generated Marketing Text & Hashtags -->
+      <div>
+        <div class="section-title" style="margin-bottom: 8px;">Generated Caption & Copy</div>
+        <div class="caption-box">
+          <textarea class="caption-text-area" id="captionOutput">Wait until you realize how Christopher Nolan shot the Interstellar docking scene with zero CGI in this single take... 🤯🚀
+
+Hans Zimmer's organ score actually drove the camera rig frequency.
+
+Would you do this manual docking? Drop your thoughts below 👇</textarea>
+          
+          <div class="copy-actions">
+            <div class="hashtag-cloud" id="hashtagList">
+              <span class="hashtag-tag">#interstellar</span>
+              <span class="hashtag-tag">#filmtok</span>
+              <span class="hashtag-tag">#cinema</span>
+              <span class="hashtag-tag">#viralreels</span>
+            </div>
+            <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="copyCaption()">
+              Copy Text
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marketing Post Strategy -->
+      <div>
+        <div class="section-title" style="margin-bottom: 8px;">Posting Velocity Strategy</div>
+        <div style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+            <span style="color: var(--text-muted);">Recommended Post Time:</span>
+            <strong style="color: var(--accent-green);">Today @ 6:45 PM</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+            <span style="color: var(--text-muted);">Platform Formats:</span>
+            <span>Reels • TikTok • Shorts</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+            <span style="color: var(--text-muted);">Sound Trend Status:</span>
+            <span style="color: var(--accent-pink); font-weight:700;">🔥 Rising 240%</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Exporting Pipeline Modal -->
+  <div class="modal-backdrop" id="exportModal">
+    <div class="modal-box">
+      <div class="modal-spinner"></div>
+      <div>
+        <h3 style="font-size: 1.3rem; margin-bottom: 4px;">Rendering 9:16 Viral Reel...</h3>
+        <p style="font-size: 0.82rem; color: var(--text-muted);">Stitching matched B-roll clips, generating animated karaoke captions, and synchronizing beat markers.</p>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-bar-fill" id="exportProgressBar"></div>
+      </div>
+
+      <div id="exportStatusText" style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">
+        Matching frame timings to audio drops...
+      </div>
+
+      <button class="btn btn-secondary" id="modalCloseBtn" style="display:none; margin: 0 auto;" onclick="closeExportModal()">
+        Download & Close
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+    <span id="toastMsg">Caption & Hashtags copied to clipboard!</span>
+  </div>
 
   <script>
-    function handleFileSelect(event) {
-      const file = event.target.files[0];
-      if (file) {
-        document.getElementById('upload-label').innerText = `Selected: ${file.name}`;
-        document.getElementById('video-placeholder').innerText = `[ Ready to process ${file.name} ]`;
+    /* ==========================================================================
+       Preset Data & State Management
+       ========================================================================== */
+    const presets = {
+      movie: {
+        mode: 'podcast',
+        title: 'Topic: Interstellar Docking Scene',
+        subtitle: 'Context: Film Talk • Nolan & Hans Zimmer',
+        icon: '🚀',
+        confidence: '99.2% Match',
+        soundText: 'Original Audio • Interstellar Breakdown',
+        entities: [
+          { label: 'Entity', value: 'Interstellar (2014)' },
+          { label: 'BPM', value: '112 (Dramatic Surge)' },
+          { label: 'Theme', value: 'Cinematography' }
+        ],
+        clips: [
+          { title: 'Endurance Spinning at 68 RPM', time: '0:00 - 0:04', thumbClass: 'clip-thumb-gradient-1', active: true },
+          { title: 'Interior Cockpit: Cooper Manual Control', time: '0:04 - 0:09', thumbClass: 'clip-thumb-gradient-2', active: true },
+          { title: 'Docking Mechanism Locking Sequence', time: '0:09 - 0:15', thumbClass: 'clip-thumb-gradient-3', active: true }
+        ],
+        transcript: [
+          { text: "THERE'S NO TIME FOR CAUTION!", start: 0, end: 3, highlight: "CAUTION" },
+          { text: "Cooper is matching the 68 RPM spin manually...", start: 3, end: 8, highlight: "MANUALLY" },
+          { text: "While Hans Zimmer's organ pushes the speakers to their absolute limit.", start: 8, end: 15, highlight: "ABSOLUTE LIMIT" }
+        ],
+        caption: "Wait until you realize how Christopher Nolan shot the Interstellar docking scene with zero CGI in this single take... 🤯🚀\n\nHans Zimmer's organ score actually drove the camera rig frequency.\n\nWould you do this manual docking? Drop your thoughts below 👇",
+        hashtags: ['#interstellar', '#filmtok', '#cinema', '#viralreels', '#hanszimmer']
+      },
+      song: {
+        mode: 'song',
+        title: 'Track: Midnight Cyber Surge',
+        subtitle: 'Artist: The Weeknd / Kavinsky Style Synthwave',
+        icon: '🎵',
+        confidence: '98.7% Shazam Match',
+        soundText: 'Trending Sound • 84.2k Reels Made',
+        entities: [
+          { label: 'Track', value: 'Neon Skyline (Official)' },
+          { label: 'Tempo', value: '128 BPM (Dance Drop)' },
+          { label: 'Vibe', value: 'Cyberpunk Aesthetic' }
+        ],
+        clips: [
+          { title: 'Official MV: Retro Ferrari Night Cruise', time: '0:00 - 0:05', thumbClass: 'clip-thumb-gradient-2', active: true },
+          { title: 'Live Stadium Tour: Pyro & Laser Drop', time: '0:05 - 0:10', thumbClass: 'clip-thumb-gradient-1', active: true },
+          { title: 'Artist Close-up: Tokyo Neon Reflection', time: '0:10 - 0:15', thumbClass: 'clip-thumb-gradient-3', active: true }
+        ],
+        transcript: [
+          { text: "TELL ME WHY WE'RE RUNNING OUT OF LIGHT", start: 0, end: 4, highlight: "LIGHT" },
+          { text: "CRUISING DOWN THE FREEWAY AT 120 MPH", start: 4, end: 9, highlight: "120 MPH" },
+          { text: "FEEL THE BASS IN YOUR CHEST!", start: 9, end: 15, highlight: "BASS" }
+        ],
+        caption: "This audio transition is taking over TikTok right now 🔥 Sync this with your night drive or concert clips to blow up your feed.\n\nSave this sound before it goes 10x viral! 🏎️💨",
+        hashtags: ['#synthwave', '#audiosync', '#trendingsound', '#musicreels', '#edittok']
+      },
+      biz: {
+        mode: 'podcast',
+        title: 'Topic: MrBeast YouTube Algorithm Secret',
+        subtitle: 'Context: Podcast with Joe Rogan • Virality Rules',
+        icon: '💡',
+        confidence: '99.8% Match',
+        soundText: 'Creator Secrets • Masterclass Clip',
+        entities: [
+          { label: 'Creator', value: 'MrBeast (Jimmy Donaldson)' },
+          { label: 'Topic', value: 'Hook Rate & Retention' },
+          { label: 'Pacing', value: 'Hyper-Fast (1.8s cuts)' }
+        ],
+        clips: [
+          { title: 'Squid Game Recreation Set Build', time: '0:00 - 0:04', thumbClass: 'clip-thumb-gradient-3', active: true },
+          { title: 'Studio Analytics Dashboard Reaction', time: '0:04 - 0:09', thumbClass: 'clip-thumb-gradient-1', active: true },
+          { title: 'Jimmy Explaining First 5 Seconds Hook', time: '0:09 - 0:15', thumbClass: 'clip-thumb-gradient-2', active: true }
+        ],
+        transcript: [
+          { text: "IF YOU DON'T HOOK THEM IN 3 SECONDS...", start: 0, end: 4, highlight: "3 SECONDS" },
+          { text: "THEY ARE GONE FOREVER. Retention is literally everything!", start: 4, end: 9, highlight: "EVERYTHING" },
+          { text: "Study thumbnail contrast and fast camera movement.", start: 9, end: 15, highlight: "STUDY" }
+        ],
+        caption: "MrBeast just revealed the exact retention formula that gets him 100M+ views every single upload 📈👀\n\nThe 3-second rule isn't an option anymore—it's mandatory.\n\nSave this checklist for your next Reel! 🚀",
+        hashtags: ['#mrbeast', '#growthhacks', '#contentcreator', '#reelsstrategy', '#marketing']
       }
+    };
+
+    let activeData = presets.movie;
+    let isPlaying = true;
+    let currentTime = 0;
+    const totalDuration = 15; // 15s standard short-form reel
+    let currentLayout = 'split'; // 'split', 'pip', 'full'
+    let currentCaptionStyle = 'hormozi'; // 'hormozi', 'neon', 'clean'
+
+    const canvas = document.getElementById('reelCanvas');
+    const ctx = canvas.getContext('2d');
+
+    /* ==========================================================================
+       UI Population & Presets
+       ========================================================================== */
+    function loadPreset(key) {
+      document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      activeData = presets[key];
+      switchMode(activeData.mode, false);
+      renderActiveMetadata();
+      currentTime = 0;
+      showToast(`Loaded "${activeData.title}" preset`);
     }
 
-    function updatePreview() {
-      const hookText = document.getElementById('hook-input').value;
-      const previewText = document.getElementById('preview-text');
-      if (hookText.trim() !== '') {
-        previewText.innerHTML = `"${hookText}"`;
+    function switchMode(mode, triggerToast = true) {
+      if (mode === 'podcast') {
+        document.getElementById('tabPodcast').classList.add('active');
+        document.getElementById('tabSong').classList.remove('active');
       } else {
-        previewText.innerHTML = `"Stop making this <b>#1 marketing mistake</b> if you want to grow!"`;
+        document.getElementById('tabSong').classList.add('active');
+        document.getElementById('tabPodcast').classList.remove('active');
+      }
+
+      if (triggerToast) {
+        showToast(`Switched pipeline to: ${mode.toUpperCase()} Repurposing`);
       }
     }
 
-    document.getElementById('generate-btn').addEventListener('click', () => {
-      alert('Generating your Instagram Reel! Extracted hooks, added smart captions, and optimized format.');
+    function renderActiveMetadata() {
+      document.getElementById('detectedTitle').innerText = activeData.title;
+      document.getElementById('detectedArtistOrSpeaker').innerText = activeData.subtitle;
+      document.getElementById('confidenceBadge').innerText = activeData.confidence;
+      document.getElementById('modeIcon').innerText = activeData.icon;
+      document.getElementById('soundPillText').innerHTML = `<span>🎵</span> ${activeData.soundText}`;
+
+      // Entities
+      const entityContainer = document.getElementById('entityList');
+      entityContainer.innerHTML = activeData.entities.map(e => 
+        `<span class="entity-tag">${e.label}: <strong>${e.value}</strong></span>`
+      ).join('');
+
+      // B-roll clips
+      const brollContainer = document.getElementById('brollList');
+      brollContainer.innerHTML = activeData.clips.map((clip, i) => `
+        <div class="b-roll-clip-item">
+          <div class="clip-thumb ${clip.thumbClass}">CLIP 0${i+1}</div>
+          <div class="clip-info">
+            <h5>${clip.title}</h5>
+            <span>${clip.time} • Auto-Sync</span>
+          </div>
+          <div class="clip-toggle">
+            <input type="checkbox" ${clip.active ? 'checked' : ''} onchange="toggleClipActive(${i})">
+          </div>
+        </div>
+      `).join('');
+
+      // Timeline B-roll labels
+      const timelineBlocks = document.getElementById('timelineBrollBlocks');
+      timelineBlocks.innerHTML = `
+        <div class="segment-block segment-broll-1">${activeData.clips[0].title.slice(0, 20)}...</div>
+        <div class="segment-block segment-broll-2">${activeData.clips[1].title.slice(0, 20)}...</div>
+        <div class="segment-block segment-broll-3">${activeData.clips[2].title.slice(0, 20)}...</div>
+      `;
+
+      // Copy & Hashtags
+      document.getElementById('captionOutput').value = activeData.caption;
+      const hashtagWrap = document.getElementById('hashtagList');
+      hashtagWrap.innerHTML = activeData.hashtags.map(tag => 
+        `<span class="hashtag-tag" onclick="insertTag('${tag}')">${tag}</span>`
+      ).join('');
+    }
+
+    function toggleClipActive(index) {
+      activeData.clips[index].active = !activeData.clips[index].active;
+      showToast(`Toggled Clip 0${index + 1} layer`);
+    }
+
+    function setLayout(layout) {
+      currentLayout = layout;
+      document.querySelectorAll('.layout-btn').forEach(b => b.classList.remove('active'));
+      if (layout === 'split') document.getElementById('layoutSplit').classList.add('active');
+      if (layout === 'pip') document.getElementById('layoutPip').classList.add('active');
+      if (layout === 'full') document.getElementById('layoutFull').classList.add('active');
+    }
+
+    function setCaptionStyle(style) {
+      currentCaptionStyle = style;
+      document.querySelectorAll('.caption-style-card').forEach(b => b.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      showToast(`Applied "${style.toUpperCase()}" subtitle typography`);
+    }
+
+    /* ==========================================================================
+       Interactive Canvas 9:16 Visualizer & Video Synthesis Mock
+       ========================================================================== */
+    function drawReel() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const progress = currentTime / totalDuration;
+      const activeClipIndex = Math.min(Math.floor((currentTime / totalDuration) * 3), 2);
+      const activeClip = activeData.clips[activeClipIndex];
+
+      // Dynamic Animated Background simulation for B-Roll video footage
+      const timeScale = currentTime * 2;
+
+      if (currentLayout === 'split') {
+        // TOP HALF: Podcast Speaker / Artist webcam
+        drawSpeakerHalf(0, 0, canvas.width, canvas.height / 2, timeScale);
+
+        // BOTTOM HALF: Matched B-Roll or Music Video Clip
+        drawBrollHalf(0, canvas.height / 2, canvas.width, canvas.height / 2, timeScale, activeClipIndex);
+
+        // Central Divider with glow
+        ctx.strokeStyle = 'rgba(236, 72, 153, 0.6)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height / 2);
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+
+      } else if (currentLayout === 'pip') {
+        // FULL SCREEN: B-Roll
+        drawBrollHalf(0, 0, canvas.width, canvas.height, timeScale, activeClipIndex);
+
+        // PiP Bubble in corner: Speaker
+        const pipW = 160;
+        const pipH = 220;
+        const pipX = canvas.width - pipW - 20;
+        const pipY = 90;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(pipX, pipY, pipW, pipH, 16);
+        ctx.clip();
+        drawSpeakerHalf(pipX, pipY, pipW, pipH, timeScale);
+        ctx.restore();
+
+        // Border around PiP
+        ctx.strokeStyle = '#8b5cf6';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.roundRect(pipX, pipY, pipW, pipH, 16);
+        ctx.stroke();
+
+      } else if (currentLayout === 'full') {
+        // Fullscreen Cinematic B-Roll with subtle speaker audio waveform overlay
+        drawBrollHalf(0, 0, canvas.width, canvas.height, timeScale, activeClipIndex);
+      }
+
+      // Render Audio Visualizer Waves
+      drawAudioWaveform(timeScale);
+
+      // Render Kinetic Karaoke Captions
+      drawKaraokeCaptions();
+
+      // Render Progress Bar at the absolute top of the Reel
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.fillRect(16, 26, canvas.width - 32, 4);
+      ctx.fillStyle = '#ff3366';
+      ctx.fillRect(16, 26, (canvas.width - 32) * progress, 4);
+    }
+
+    // Speaker Visual Mock
+    function drawSpeakerHalf(x, y, w, h, t) {
+      const grad = ctx.createLinearGradient(x, y, x, y + h);
+      grad.addColorStop(0, '#131422');
+      grad.addColorStop(1, '#08080f');
+      ctx.fillStyle = grad;
+      ctx.fillRect(x, y, w, h);
+
+      // Ambient studio lighting ring behind speaker
+      const pulse = Math.sin(t * 2) * 10;
+      ctx.fillStyle = 'rgba(139, 92, 246, 0.18)';
+      ctx.beginPath();
+      ctx.arc(x + w / 2, y + h / 2, 90 + pulse, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Speaker Silhouette / Graphic
+      ctx.fillStyle = '#2d3250';
+      ctx.beginPath();
+      // Head
+      ctx.arc(x + w / 2, y + h / 2 - 20, 42, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Shoulders
+      ctx.beginPath();
+      ctx.ellipse(x + w / 2, y + h / 2 + 70, 75, 45, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Podcast Studio Microphone
+      ctx.fillStyle = '#6366f1';
+      ctx.beginPath();
+      ctx.roundRect(x + w / 2 - 12, y + h / 2 + 10, 24, 44, 8);
+      ctx.fill();
+      ctx.strokeStyle = '#9ca3af';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(x + w / 2, y + h / 2 + 30, 20, 0, Math.PI);
+      ctx.stroke();
+
+      // Tag Label: Primary Audio
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.fillRect(x + 16, y + h - 38, 150, 24);
+      ctx.fillStyle = '#a5b4fc';
+      ctx.font = '600 13px Outfit';
+      ctx.fillText('🎙️ SPEAKER CAM', x + 24, y + h - 22);
+    }
+
+    // Matched Topic B-Roll Visual Mock (Simulating movie footage / music video aesthetics)
+    function drawBrollHalf(x, y, w, h, t, clipIndex) {
+      const grad = ctx.createLinearGradient(x, y, x + w, y + h);
+      
+      if (activeData.mode === 'podcast') {
+        // Cinematic Space / Interstellar Vibe
+        grad.addColorStop(0, '#030712');
+        grad.addColorStop(0.5, '#1e1b4b');
+        grad.addColorStop(1, '#0f172a');
+        ctx.fillStyle = grad;
+        ctx.fillRect(x, y, w, h);
+
+        // Simulated spinning docking ring / stars
+        ctx.save();
+        ctx.translate(x + w / 2, y + h / 2);
+        ctx.rotate(t * 0.4);
+
+        // Celestial rings
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(0, 0, 110, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Mechanical docking modules
+        ctx.fillStyle = '#38bdf8';
+        for (let i = 0; i < 12; i++) {
+          const ang = (i * Math.PI) / 6;
+          const mx = Math.cos(ang) * 110;
+          const my = Math.sin(ang) * 110;
+          ctx.fillRect(mx - 8, my - 8, 16, 16);
+        }
+        ctx.restore();
+
+      } else {
+        // Music Video / Cyberpunk Neon Street Vibe
+        grad.addColorStop(0, '#2e1065');
+        grad.addColorStop(0.5, '#831843');
+        grad.addColorStop(1, '#0f172a');
+        ctx.fillStyle = grad;
+        ctx.fillRect(x, y, w, h);
+
+        // Perspective grid lines
+        ctx.strokeStyle = 'rgba(236, 72, 153, 0.35)';
+        ctx.lineWidth = 2;
+        const horizon = y + h * 0.4;
+        for (let i = -w; i < w * 2; i += 50) {
+          ctx.beginPath();
+          ctx.moveTo(x + w / 2, horizon);
+          ctx.lineTo(x + i + Math.sin(t) * 20, y + h);
+          ctx.stroke();
+        }
+      }
+
+      // Clip indicator badge
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.fillRect(x + 16, y + 16, 210, 26);
+      ctx.fillStyle = '#ec4899';
+      ctx.font = '700 12px Outfit';
+      ctx.fillText(`🎬 AUTO B-ROLL: CLIP 0${clipIndex + 1}`, x + 24, y + 33);
+    }
+
+    // Audio Waveform overlay
+    function drawAudioWaveform(t) {
+      const waveY = canvas.height * 0.48;
+      ctx.fillStyle = 'rgba(236, 72, 153, 0.8)';
+
+      for (let i = 0; i < 30; i++) {
+        const height = Math.abs(Math.sin(t * 3 + i * 0.5)) * 36 + 6;
+        const xPos = canvas.width / 2 - 120 + i * 8;
+        ctx.fillRect(xPos, waveY - height / 2, 4, height);
+      }
+    }
+
+    // Dynamic Viral Karaoke Subtitle Engine
+    function drawKaraokeCaptions() {
+      // Find active subtitle sentence
+      const item = activeData.transcript.find(
+        t => currentTime >= t.start && currentTime < t.end
+      ) || activeData.transcript[0];
+
+      const captionY = canvas.height * 0.76;
+      ctx.save();
+      ctx.textAlign = 'center';
+
+      if (currentCaptionStyle === 'hormozi') {
+        // Hormozi Style: Big bold, high-contrast yellow/green key words with dark drop
+        ctx.font = '900 28px Outfit';
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = '#000000';
+        ctx.strokeText(item.text, canvas.width / 2, captionY);
+
+        ctx.fillStyle = '#facc15'; // Vibrant Hormozi yellow
+        ctx.fillText(item.text, canvas.width / 2, captionY);
+
+      } else if (currentCaptionStyle === 'neon') {
+        // Neon Cyber Glow
+        ctx.shadowColor = '#ec4899';
+        ctx.shadowBlur = 18;
+        ctx.font = '800 26px Outfit';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(item.text, canvas.width / 2, captionY);
+        ctx.shadowBlur = 0;
+
+      } else if (currentCaptionStyle === 'clean') {
+        // Minimal background pill
+        ctx.font = '600 21px Outfit';
+        const textMetrics = ctx.measureText(item.text);
+        const padding = 16;
+        
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+        ctx.beginPath();
+        ctx.roundRect(
+          canvas.width / 2 - textMetrics.width / 2 - padding,
+          captionY - 26,
+          textMetrics.width + padding * 2,
+          40,
+          8
+        );
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(item.text, canvas.width / 2, captionY);
+      }
+
+      ctx.restore();
+    }
+
+    /* ==========================================================================
+       Timeline & Playback Loop
+       ========================================================================== */
+    let lastTimestamp = performance.now();
+
+    function loop(now) {
+      const dt = (now - lastTimestamp) / 1000;
+      lastTimestamp = now;
+
+      if (isPlaying) {
+        currentTime += dt;
+        if (currentTime >= totalDuration) {
+          currentTime = 0;
+        }
+        updateTimelineUI();
+      }
+
+      drawReel();
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      const playIcon = document.getElementById('playIcon');
+      if (isPlaying) {
+        playIcon.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>`;
+      } else {
+        playIcon.innerHTML = `<path d="M8 5v14l11-7z"></path>`;
+      }
+    }
+
+    function updateTimelineUI() {
+      const pct = (currentTime / totalDuration) * 100;
+      document.getElementById('playhead').style.left = `${pct}%`;
+
+      const curSec = Math.floor(currentTime);
+      const totalSec = Math.floor(totalDuration);
+      document.getElementById('timeCounter').innerText = 
+        `00:${curSec < 10 ? '0' + curSec : curSec} / 00:${totalSec}`;
+    }
+
+    function seekTimeline(e) {
+      const rect = document.getElementById('timelineTrackArea').getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = Math.max(0, Math.min(1, clickX / rect.width));
+      currentTime = pct * totalDuration;
+      updateTimelineUI();
+    }
+
+    /* ==========================================================================
+       Actions, Uploads & Toast Engine
+       ========================================================================== */
+    function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        document.getElementById('fileUploadName').innerText = file.name;
+        showToast(`Analyzed ${file.name} — Auto-matching B-roll...`);
+        triggerAnalyze();
+      }
+    }
+
+    function fetchFromUrl() {
+      const url = document.getElementById('externalUrl').value.trim();
+      if (!url) {
+        showToast("Please enter a valid podcast/song link.");
+        return;
+      }
+      showToast("Fetching stream & fingerprinting audio...");
+      triggerAnalyze();
+    }
+
+    function triggerAnalyze() {
+      showToast("Scanning audio waveforms & semantic topics...");
+      setTimeout(() => {
+        showToast("✓ Matched 3 dynamic visual scenes with beat sync!");
+      }, 1200);
+    }
+
+    function copyCaption() {
+      const copyText = document.getElementById("captionOutput").value;
+      
+      // Fallback for clipboard copy across various iframe contexts
+      const tempInput = document.createElement("textarea");
+      tempInput.value = copyText;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+
+      showToast("✓ Caption & Hashtags copied for Instagram/TikTok!");
+    }
+
+    function insertTag(tag) {
+      const area = document.getElementById("captionOutput");
+      area.value += ` ${tag}`;
+      showToast(`Added ${tag}`);
+    }
+
+    function openExportModal() {
+      const modal = document.getElementById('exportModal');
+      const pBar = document.getElementById('exportProgressBar');
+      const status = document.getElementById('exportStatusText');
+      const closeBtn = document.getElementById('modalCloseBtn');
+      
+      modal.classList.add('open');
+      pBar.style.width = '0%';
+      closeBtn.style.display = 'none';
+
+      let prog = 0;
+      const interval = setInterval(() => {
+        prog += 20;
+        pBar.style.width = `${prog}%`;
+
+        if (prog === 40) {
+          status.innerText = "Encoding 60 FPS 9:16 vertical stream...";
+        } else if (prog === 80) {
+          status.innerText = "Baking Hormozi subtitles & audio ducking...";
+        } else if (prog >= 100) {
+          clearInterval(interval);
+          status.innerText = "✓ Reel successfully compiled & ready!";
+          closeBtn.style.display = 'block';
+        }
+      }, 400);
+    }
+
+    function closeExportModal() {
+      document.getElementById('exportModal').classList.remove('open');
+      showToast("Downloaded Reel: Ready for Instagram & TikTok posting!");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3200);
+    }
+
+    // Initialize application on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderActiveMetadata();
+      updateTimelineUI();
     });
   </script>
 </body>
