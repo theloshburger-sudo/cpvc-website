@@ -3,1373 +3,422 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marvel Multiverse Championship | Battleworld Arena</title>
-  
-  <!-- Single Google Fonts Link -->
+  <title>ReelCraft - AI Content Repurposer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --marvel-red: #ed1d24;
-      --marvel-dark-red: #a80f14;
-      --gold: #fdb927;
-      --arc-blue: #00e5ff;
-      --space-purple: #7928ca;
-      --dark-bg: #0b0d13;
-      --surface: #141824;
-      --surface-border: #232a3b;
-      --surface-light: #1e2436;
-      --text-white: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg-dark: #0f0c20;
+      --bg-card: rgba(23, 19, 47, 0.7);
+      --bg-card-hover: rgba(33, 27, 66, 0.8);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --primary-grad: linear-gradient(135deg, #8a2387, #e94057, #f27121);
+      --accent-purple: #9d4edd;
+      --accent-pink: #e94057;
+      --text-main: #f8f9fa;
+      --text-muted: #a0a5ba;
+      --sidebar-width: 260px;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--dark-bg);
-      color: var(--text-white);
-      line-height: 1.5;
-      overflow-x: hidden;
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(237, 29, 36, 0.2) 0%, transparent 60%),
-        radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-      background-size: 100% 100%, 20px 20px;
-    }
-
-    h1, h2, h3, h4, .comic-title {
-      font-family: 'Bebas Neue', sans-serif;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-
-    /* Navigation Bar */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(11, 13, 19, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 3px solid var(--marvel-red);
-      padding: 0.75rem 2rem;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
       display: flex;
+      height: 100vh;
+      overflow: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(138, 35, 135, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(242, 113, 33, 0.15) 0%, transparent 40%);
+    }
+
+    /* Sidebar */
+    aside {
+      width: var(--sidebar-width);
+      border-right: 1px solid var(--border-color);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
+      background: rgba(15, 12, 32, 0.5);
+      backdrop-filter: blur(10px);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      text-decoration: none;
-    }
-
-    .marvel-badge {
-      background: var(--marvel-red);
-      color: #fff;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.2rem;
-      line-height: 1;
-      padding: 0.2rem 0.6rem;
-      letter-spacing: -1.5px;
-      transform: scaleY(1.1);
-      box-shadow: 4px 4px 0 #fff;
-    }
-
-    .brand-sub {
-      color: var(--gold);
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      letter-spacing: 2px;
-    }
-
-    nav {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    nav a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: color 0.2s, transform 0.2s;
-    }
-
-    nav a:hover {
-      color: var(--gold);
-      transform: translateY(-2px);
-    }
-
-    .sound-toggle {
-      background: transparent;
-      border: 1px solid var(--surface-border);
-      color: var(--text-white);
-      padding: 0.4rem 0.8rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .sound-toggle:hover {
-      border-color: var(--arc-blue);
-      color: var(--arc-blue);
-    }
-
-    /* Hero Banner */
-    .hero {
-      position: relative;
-      padding: 5rem 2rem 4rem;
-      text-align: center;
-      border-bottom: 2px solid var(--surface-border);
-      overflow: hidden;
-    }
-
-    .hero-stripes {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0.05;
-      background: repeating-linear-gradient(
-        -45deg,
-        #fff,
-        #fff 20px,
-        transparent 20px,
-        transparent 40px
-      );
-      pointer-events: none;
-    }
-
-    .status-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(237, 29, 36, 0.15);
-      border: 1px solid var(--marvel-red);
-      color: var(--gold);
-      padding: 0.35rem 1rem;
+      gap: 12px;
+      font-size: 1.25rem;
       font-weight: 800;
-      font-size: 0.85rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+      background: var(--primary-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 32px;
+      padding: 0 8px;
     }
 
-    .pulse-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--marvel-red);
-      box-shadow: 0 0 10px var(--marvel-red);
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.6); opacity: 0.4; }
-    }
-
-    .hero-title {
-      font-size: clamp(3.2rem, 8vw, 6.5rem);
-      line-height: 0.95;
-      margin-bottom: 1rem;
-      text-shadow: 
-        3px 3px 0 var(--marvel-red),
-        6px 6px 0 #000;
-    }
-
-    .hero-desc {
-      max-width: 650px;
-      margin: 0 auto 2.5rem;
-      color: var(--text-muted);
-      font-size: 1.15rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      justify-content: center;
-      gap: 1.2rem;
-      flex-wrap: wrap;
-    }
-
-    /* Buttons */
-    .btn {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      padding: 0.75rem 2rem;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-transform: uppercase;
-      transition: all 0.2s ease;
-      position: relative;
-    }
-
-    .btn-primary {
-      background: var(--marvel-red);
-      color: #fff;
-      box-shadow: 4px 4px 0 #000, 4px 4px 0 var(--gold);
-      transform: skew(-6deg);
-    }
-
-    .btn-primary span { transform: skew(6deg); }
-
-    .btn-primary:hover {
-      background: #ff2d34;
-      transform: skew(-6deg) translateY(-3px);
-      box-shadow: 6px 6px 0 #000, 6px 6px 0 var(--gold);
-    }
-
-    .btn-secondary {
-      background: var(--surface);
-      color: var(--text-white);
-      border: 2px solid var(--surface-border);
-      transform: skew(-6deg);
-    }
-
-    .btn-secondary span { transform: skew(6deg); }
-
-    .btn-secondary:hover {
-      border-color: var(--arc-blue);
-      color: var(--arc-blue);
-      transform: skew(-6deg) translateY(-3px);
-    }
-
-    /* Main Container */
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 4rem 1.5rem;
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 2.5rem;
-      border-bottom: 2px solid var(--surface-border);
-      padding-bottom: 1rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .section-title {
-      font-size: 2.8rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .section-title::before {
-      content: '';
-      display: block;
-      width: 10px;
-      height: 38px;
-      background: var(--marvel-red);
-    }
-
-    /* Interactive Live Battles Section */
-    .matchups-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 2rem;
-      margin-bottom: 5rem;
-    }
-
-    .matchup-card {
-      background: var(--surface);
-      border: 2px solid var(--surface-border);
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      transition: transform 0.3s, border-color 0.3s;
-    }
-
-    .matchup-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(237, 29, 36, 0.6);
-    }
-
-    .matchup-bar {
-      background: #000;
-      padding: 0.6rem 1.2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--surface-border);
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: var(--gold);
-      letter-spacing: 1px;
-    }
-
-    .matchup-content {
-      padding: 1.5rem;
+    .nav-list {
+      list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
+      gap: 8px;
     }
 
-    .combatant {
-      display: grid;
-      grid-template-columns: 60px 1fr auto;
-      align-items: center;
-      gap: 1rem;
-      background: var(--surface-light);
-      padding: 0.9rem;
-      border: 1px solid var(--surface-border);
-      position: relative;
-      transition: all 0.2s;
-    }
-
-    .combatant.voted {
-      border-color: var(--gold);
-      box-shadow: inset 0 0 15px rgba(253, 185, 39, 0.15);
-    }
-
-    .avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 4px;
-      background-size: cover;
-      background-position: center;
-      border: 2px solid var(--surface-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      background-color: #000;
-    }
-
-    .combatant-meta h4 {
-      font-size: 1.5rem;
-      line-height: 1;
-      margin-bottom: 0.2rem;
-    }
-
-    .combatant-meta p {
-      font-size: 0.75rem;
+    .nav-item {
+      padding: 12px 16px;
+      border-radius: 12px;
       color: var(--text-muted);
-      text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    .vote-action {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 0.4rem;
-    }
-
-    .vote-btn {
-      background: transparent;
-      border: 2px solid var(--gold);
-      color: var(--gold);
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.2rem;
-      padding: 0.3rem 1rem;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .vote-btn:hover {
-      background: var(--gold);
-      color: #000;
-      transform: scale(1.05);
-    }
-
-    .vote-count {
-      font-size: 0.8rem;
-      font-weight: 800;
-      color: var(--text-white);
-    }
-
-    .vs-separator {
-      position: relative;
-      text-align: center;
-      margin: -0.5rem 0;
-    }
-
-    .vs-pill {
-      background: var(--marvel-red);
-      color: #fff;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem;
-      display: inline-block;
-      padding: 0.1rem 0.8rem;
-      transform: skew(-10deg);
-      box-shadow: 0 0 10px rgba(237, 29, 36, 0.6);
-      position: relative;
-      z-index: 2;
-    }
-
-    .vs-separator::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background: var(--surface-border);
-      z-index: 1;
-    }
-
-    .matchup-progress {
-      height: 8px;
-      background: #111;
-      border-radius: 4px;
-      overflow: hidden;
-      display: flex;
-      margin-top: 0.4rem;
-      border: 1px solid var(--surface-border);
-    }
-
-    .prog-a {
-      height: 100%;
-      background: var(--arc-blue);
-      transition: width 0.5s ease-out;
-    }
-
-    .prog-b {
-      height: 100%;
-      background: var(--marvel-red);
-      transition: width 0.5s ease-out;
-    }
-
-    /* Multiverse Battle Simulator Widget */
-    .simulator-box {
-      background: linear-gradient(145deg, #161b29, #0f131f);
-      border: 3px solid var(--arc-blue);
-      box-shadow: 0 0 30px rgba(0, 229, 255, 0.15);
-      padding: 2.5rem;
-      margin-bottom: 5rem;
-      position: relative;
-    }
-
-    .sim-tag {
-      position: absolute;
-      top: -15px;
-      right: 25px;
-      background: var(--arc-blue);
-      color: #000;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem;
-      padding: 0.2rem 0.8rem;
-      letter-spacing: 1px;
-      font-weight: bold;
-    }
-
-    .sim-grid {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 2rem;
-      margin: 2rem 0;
-    }
-
-    @media (max-width: 768px) {
-      .sim-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-    }
-
-    .sim-select-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-
-    .sim-select-wrap label {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem;
-      color: var(--gold);
-    }
-
-    .sim-select {
-      background: #080a10;
-      border: 2px solid var(--surface-border);
-      color: #fff;
-      padding: 0.9rem;
-      font-size: 1rem;
-      font-weight: 700;
-      width: 100%;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .sim-select:focus {
-      border-color: var(--arc-blue);
-    }
-
-    .sim-result-screen {
-      background: #07090e;
-      border: 1px solid var(--surface-border);
-      padding: 1.5rem;
-      min-height: 120px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 0.95rem;
-      color: var(--arc-blue);
-      white-space: pre-wrap;
-      line-height: 1.6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    /* Leaderboard & Bracket Tables */
-    .leaderboard-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
-    }
-
-    .leaderboard-table th {
-      background: #0a0d14;
-      padding: 1rem 1.2rem;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      color: var(--gold);
-      border-bottom: 2px solid var(--surface-border);
-    }
-
-    .leaderboard-table td {
-      padding: 1rem 1.2rem;
-      border-bottom: 1px solid var(--surface-border);
       font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
     }
 
-    .leaderboard-table tr:hover td {
-      background: var(--surface-light);
+    .nav-item:hover, .nav-item.active {
+      color: var(--text-main);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
     }
 
-    .rank-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.6rem;
-      color: var(--marvel-red);
-      width: 60px;
+    .nav-item.active {
+      border-color: rgba(233, 64, 87, 0.4);
     }
 
-    .power-score {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem;
-      color: var(--arc-blue);
-      letter-spacing: 1px;
+    /* Main Area */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
     }
 
-    /* Entry / Agent Register Section */
-    .register-wrapper {
+    header {
+      padding: 24px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-title h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .header-title p {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 4px;
+    }
+
+    .btn-gradient {
+      background: var(--primary-grad);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(233, 64, 87, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-gradient:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(233, 64, 87, 0.4);
+    }
+
+    .content-area {
+      padding: 36px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      background: var(--surface);
-      border: 2px solid var(--surface-border);
-      padding: 3rem;
-      box-shadow: 10px 10px 0 #000;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+    }
+
+    /* Upload Box */
+    .upload-container {
+      background: var(--bg-card);
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
       position: relative;
     }
 
-    @media (max-width: 850px) {
-      .register-wrapper {
-        grid-template-columns: 1fr;
-        padding: 1.8rem;
-      }
+    .upload-container:hover {
+      border-color: var(--accent-pink);
+      background: var(--bg-card-hover);
+    }
+
+    .upload-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(233, 64, 87, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: var(--accent-pink);
+    }
+
+    .upload-container h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .upload-container p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Form Options */
+    .options-section {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
     .form-group {
-      margin-bottom: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .form-group label {
-      display: block;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.2rem;
-      letter-spacing: 1px;
-      margin-bottom: 0.4rem;
-      color: var(--gold);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
     }
 
-    .form-control {
+    select, input[type="text"] {
       width: 100%;
-      padding: 0.85rem;
-      background: #0a0d14;
-      border: 2px solid var(--surface-border);
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
-    }
-
-    .form-control:focus {
+      padding: 12px 16px;
+      background: rgba(15, 12, 32, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-main);
       outline: none;
-      border-color: var(--marvel-red);
     }
 
-    .radio-pills {
-      display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
+    select:focus, input[type="text"]:focus {
+      border-color: var(--accent-pink);
     }
 
-    .radio-label {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: #090c13;
-      border: 1px solid var(--surface-border);
-      padding: 0.5rem 0.9rem;
-      font-size: 0.85rem;
-      font-weight: 700;
-      transition: all 0.2s;
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
     }
 
-    .radio-label input {
-      accent-color: var(--marvel-red);
-    }
-
-    .radio-label:has(input:checked) {
-      border-color: var(--marvel-red);
-      background: rgba(237, 29, 36, 0.15);
-      color: #fff;
-    }
-
-    .briefing-card {
-      background: #0a0d14;
-      border-left: 4px solid var(--gold);
-      padding: 2rem;
+    /* Preview Sidebar */
+    .preview-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      gap: 16px;
     }
 
-    .briefing-rules {
-      list-style: none;
-      margin-top: 1rem;
-    }
-
-    .briefing-rules li {
+    .phone-frame {
+      width: 100%;
+      height: 480px;
+      background: #000;
+      border-radius: 24px;
+      border: 4px solid #2d2b42;
       position: relative;
-      padding-left: 1.6rem;
-      margin-bottom: 0.8rem;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .briefing-rules li::before {
-      content: '▶';
-      position: absolute;
-      left: 0;
-      color: var(--marvel-red);
-      font-size: 0.75rem;
-      top: 2px;
-    }
-
-    /* In-Page Message Box / Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      display: none;
+      overflow: hidden;
+      display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
-      padding: 1.5rem;
     }
 
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .comic-modal {
-      background: var(--surface);
-      border: 4px solid var(--marvel-red);
-      box-shadow: 12px 12px 0 #000;
-      max-width: 520px;
-      width: 100%;
-      padding: 2.5rem;
-      text-align: center;
-      position: relative;
-      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    @keyframes popIn {
-      from { transform: scale(0.85); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .badge-stamp {
-      display: inline-block;
-      border: 3px dashed var(--gold);
-      padding: 0.5rem 1.5rem;
-      color: var(--gold);
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: 2px;
-      transform: rotate(-3deg);
-      margin-bottom: 1.5rem;
-    }
-
-    .modal-close-btn {
+    .phone-overlay {
       position: absolute;
-      top: 15px;
-      right: 15px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.8rem;
-      cursor: pointer;
-      line-height: 1;
+      bottom: 20px;
+      left: 16px;
+      right: 16px;
+      z-index: 2;
     }
 
-    .modal-close-btn:hover {
-      color: #fff;
+    .caption-preview {
+      font-size: 0.8rem;
+      line-height: 1.3;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border-left: 3px solid var(--accent-pink);
     }
 
-    /* Toast Notification */
-    .toast {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: var(--surface-light);
-      border: 2px solid var(--gold);
-      color: #fff;
-      padding: 1rem 1.5rem;
-      font-weight: 700;
-      font-size: 0.95rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.7);
-      transform: translateY(150%);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 1001;
+    .stats-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 12px;
       display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
-
-    .toast.show {
-      transform: translateY(0);
-    }
-
-    /* Footer */
-    footer {
-      background: #07080c;
-      border-top: 1px solid var(--surface-border);
-      padding: 3rem 1.5rem;
+      justify-content: space-between;
       text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
     }
 
-    .footer-logo {
-      margin-bottom: 1rem;
-      display: inline-block;
+    .stat-item h4 {
+      font-size: 1.1rem;
+      color: var(--accent-pink);
+    }
+
+    .stat-item span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    #file-input {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header>
-    <a href="#" class="brand">
-      <div class="marvel-badge">MARVEL</div>
-      <div class="brand-sub">CHAMPIONSHIP ARENA</div>
-    </a>
-    <nav>
-      <a href="#matches">Live Battles</a>
-      <a href="#simulator">Simulator</a>
-      <a href="#standings">Standings</a>
-      <a href="#register">Draft Entry</a>
-      <button class="sound-toggle" id="soundToggle" onclick="toggleAudioFx()">
-        <span id="soundIcon">⚡</span> Sound FX: <span id="soundState">ON</span>
-      </button>
-    </nav>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-stripes"></div>
-    <div class="status-tag">
-      <span class="pulse-dot"></span> Phase IV: Multiverse Incursion Arena
+  <aside>
+    <div>
+      <div class="brand">
+        <span>⚡ ReelCraft</span>
+      </div>
+      <ul class="nav-list">
+        <li class="nav-item active"><span>🎬</span> Studio</li>
+        <li class="nav-item"><span>📊</span> Analytics</li>
+        <li class="nav-item"><span>🚀</span> Auto-Scheduler</li>
+        <li class="nav-item"><span>⚙️</span> Settings</li>
+      </ul>
     </div>
-    <h1 class="hero-title">CONTEST OF MULTIVERSAL CHAMPIONS</h1>
-    <p class="hero-desc">
-      Cast your tactical votes, simulate epic superhero confrontations, and register your SHIELD credentials for the ultimate crossover tournament prize pool.
-    </p>
-    <div class="hero-actions">
-      <a href="#matches" class="btn btn-primary"><span>Vote on Matches</span></a>
-      <a href="#simulator" class="btn btn-secondary"><span>Run Simulation</span></a>
+    <div style="font-size: 0.8rem; color: var(--text-muted); padding: 0 8px;">
+      Pro Plan • 12/50 Credits
     </div>
-  </section>
+  </aside>
 
-  <!-- Main Content -->
-  <div class="container">
+  <main>
+    <header>
+      <div class="header-title">
+        <h1>Create Instagram Reel</h1>
+        <p>Turn long-form videos & podcasts into high-performing short clips</p>
+      </div>
+      <button class="btn-gradient" id="generate-btn">Generate Content</button>
+    </header>
 
-    <!-- Matchups Grid -->
-    <div class="section-header" id="matches">
+    <div class="content-area">
       <div>
-        <h2 class="section-title">Active Combat Brackets</h2>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">Live crowd voting directly impacts hero seeding and stamina bonuses.</p>
-      </div>
-      <div style="font-size: 0.9rem; font-weight: 700; color: var(--gold);">
-        ROUND 02 OF 08 • CLOSES IN: 04H 21M
-      </div>
-    </div>
-
-    <div class="matchups-grid">
-      
-      <!-- Match 1 -->
-      <div class="matchup-card" id="match-1">
-        <div class="matchup-bar">
-          <span>MATCH 01 • QUANTUM REALM</span>
-          <span>TIER: ALPHA</span>
+        <div class="upload-container" id="drop-zone" onclick="document.getElementById('file-input').click()">
+          <div class="upload-icon">
+            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+          </div>
+          <h3 id="upload-label">Drop video or audio file here</h3>
+          <p>Supports MP4, MP3, MOV (Max 500MB)</p>
+          <input type="file" id="file-input" accept="video/*,audio/*" onchange="handleFileSelect(event)">
         </div>
-        <div class="matchup-content">
-          <div class="combatant" id="combatant-1-a">
-            <div class="avatar" style="border-color: #e23636;">🛡️</div>
-            <div class="combatant-meta">
-              <h4>Iron Man</h4>
-              <p>Model 70 Nano Armor</p>
+
+        <div class="options-section">
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Target Audience / Tone</label>
+              <select>
+                <option>Educational & Professional</option>
+                <option>High Energy & Hype</option>
+                <option>Casual & Relatable</option>
+                <option>Storytelling & Deep</option>
+              </select>
             </div>
-            <div class="vote-action">
-              <button class="vote-btn" onclick="castVote(1, 'a', 'Iron Man')">Vote</button>
-              <span class="vote-count" id="count-1-a">3,420 Votes</span>
+            <div class="form-group">
+              <label>Aspect Ratio</label>
+              <select>
+                <option>9:16 (Reels, TikTok, Shorts)</option>
+                <option>1:1 (Square Feed)</option>
+                <option>16:9 (Landscape Output)</option>
+              </select>
             </div>
           </div>
 
-          <div class="vs-separator">
-            <span class="vs-pill">VS</span>
+          <div class="form-group">
+            <label>Auto-Caption Style</label>
+            <select id="caption-style" onchange="updatePreview()">
+              <option value="pop">Bold Pop-up (Alex Hormozi Style)</option>
+              <option value="minimal">Minimal Subtitles</option>
+              <option value="gradient">Gradient Highlight</option>
+            </select>
           </div>
 
-          <div class="combatant" id="combatant-1-b">
-            <div class="avatar" style="border-color: #00e5ff;">⚡</div>
-            <div class="combatant-meta">
-              <h4>Thor Odinson</h4>
-              <p>All-Father Lightning</p>
-            </div>
-            <div class="vote-action">
-              <button class="vote-btn" onclick="castVote(1, 'b', 'Thor Odinson')">Vote</button>
-              <span class="vote-count" id="count-1-b">3,890 Votes</span>
-            </div>
-          </div>
-
-          <div class="matchup-progress">
-            <div class="prog-a" id="prog-1-a" style="width: 47%;"></div>
-            <div class="prog-b" id="prog-1-b" style="width: 53%;"></div>
+          <div class="form-group">
+            <label>Hook Focus (Topic or Keywords)</label>
+            <input type="text" placeholder="e.g. How to grow on Instagram, 3 marketing hacks" id="hook-input" oninput="updatePreview()">
           </div>
         </div>
       </div>
 
-      <!-- Match 2 -->
-      <div class="matchup-card" id="match-2">
-        <div class="matchup-bar">
-          <span>MATCH 02 • ASTEROID M</span>
-          <span>TIER: OMEGA</span>
-        </div>
-        <div class="matchup-content">
-          <div class="combatant" id="combatant-2-a">
-            <div class="avatar" style="border-color: #7928ca;">🔮</div>
-            <div class="combatant-meta">
-              <h4>Scarlet Witch</h4>
-              <p>Chaos Magic Reality Warp</p>
-            </div>
-            <div class="vote-action">
-              <button class="vote-btn" onclick="castVote(2, 'a', 'Scarlet Witch')">Vote</button>
-              <span class="vote-count" id="count-2-a">5,110 Votes</span>
+      <div class="preview-card">
+        <h3>Live AI Preview</h3>
+        <div class="phone-frame">
+          <div style="color: var(--text-muted); font-size: 0.85rem;" id="video-placeholder">
+            Upload media to preview render
+          </div>
+          <div class="phone-overlay">
+            <div class="caption-preview" id="preview-text">
+              "Stop making this <b>#1 marketing mistake</b> if you want to grow!"
             </div>
           </div>
+        </div>
 
-          <div class="vs-separator">
-            <span class="vs-pill">VS</span>
+        <div class="stats-card">
+          <div class="stat-item">
+            <h4>88%</h4>
+            <span>Viral Score</span>
           </div>
-
-          <div class="combatant" id="combatant-2-b">
-            <div class="avatar" style="border-color: #fdb927;">👁️</div>
-            <div class="combatant-meta">
-              <h4>Doctor Strange</h4>
-              <p>Eye of Agamotto Spells</p>
-            </div>
-            <div class="vote-action">
-              <button class="vote-btn" onclick="castVote(2, 'b', 'Doctor Strange')">Vote</button>
-              <span class="vote-count" id="count-2-b">4,720 Votes</span>
-            </div>
+          <div class="stat-item">
+            <h4>15s</h4>
+            <span>Est. Length</span>
           </div>
-
-          <div class="matchup-progress">
-            <div class="prog-a" id="prog-2-a" style="width: 52%;"></div>
-            <div class="prog-b" id="prog-2-b" style="width: 48%;"></div>
+          <div class="stat-item">
+            <h4>High</h4>
+            <span>Hook Strength</span>
           </div>
-        </div>
-      </div>
-
-      <!-- Match 3 -->
-      <div class="matchup-card" id="match-3">
-        <div class="matchup-bar">
-          <span>MATCH 03 • SAVAGE LAND</span>
-          <span>TIER: BRAWLER</span>
-        </div>
-        <div class="matchup-content">
-          <div class="combatant" id="combatant-3-a">
-            <div class="avatar" style="border-color: #10b981;">🕸️</div>
-            <div class="combatant-meta">
-              <h4>Spider-Man</h4>
-              <p>Spider-Sense & Agility</p>
-            </div>
-            <div class="vote-action">
-              <button class="vote-btn" onclick="castVote(3, 'a', 'Spider-Man')">Vote</button>
-              <span class="vote-count" id="count-3-a">6,240 Votes</span>
-            </div>
-          </div>
-
-          <div class="vs-separator">
-            <span class="vs-pill">VS</span>
-          </div>
-
-          <div class="combatant" id="combatant-3-b">
-            <div class="avatar" style="border-color: #fdb927;">🐺</div>
-            <div class="combatant-meta">
-              <h4>Wolverine</h4>
-              <p>Adamantium Claws & Regen</p>
-            </div>
-            <div class="vote-action">
-              <button class="vote-btn" onclick="castVote(3, 'b', 'Wolverine')">Vote</button>
-              <span class="vote-count" id="count-3-b">5,910 Votes</span>
-            </div>
-          </div>
-
-          <div class="matchup-progress">
-            <div class="prog-a" id="prog-3-a" style="width: 51%;"></div>
-            <div class="prog-b" id="prog-3-b" style="width: 49%;"></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Interactive Battle Simulator -->
-    <div class="simulator-box" id="simulator">
-      <div class="sim-tag">AI TACTICAL MATRIX</div>
-      <h2 class="comic-title" style="font-size: 2.2rem; color: var(--arc-blue); margin-bottom: 0.5rem;">
-        Multiverse Clash Simulator
-      </h2>
-      <p style="color: var(--text-muted); font-size: 0.95rem;">Select any two legends to simulate a probability clash calculated by power-grid attributes.</p>
-
-      <div class="sim-grid">
-        <div class="sim-select-wrap">
-          <label for="fighter1">Fighter 01</label>
-          <select id="fighter1" class="sim-select">
-            <option value="iron_man">Iron Man (Power Level 88)</option>
-            <option value="thor" selected>Thor Odinson (Power Level 96)</option>
-            <option value="hulk">The Incredible Hulk (Power Level 97)</option>
-            <option value="scarlet_witch">Scarlet Witch (Power Level 99)</option>
-            <option value="spider_man">Spider-Man (Power Level 84)</option>
-            <option value="black_panther">Black Panther (Power Level 86)</option>
-          </select>
-        </div>
-
-        <div style="text-align: center;">
-          <button class="btn btn-primary" onclick="runSimulation()">
-            <span>Simulate Battle</span>
-          </button>
-        </div>
-
-        <div class="sim-select-wrap">
-          <label for="fighter2">Fighter 02</label>
-          <select id="fighter2" class="sim-select">
-            <option value="iron_man">Iron Man (Power Level 88)</option>
-            <option value="thor">Thor Odinson (Power Level 96)</option>
-            <option value="hulk" selected>The Incredible Hulk (Power Level 97)</option>
-            <option value="scarlet_witch">Scarlet Witch (Power Level 99)</option>
-            <option value="spider_man">Spider-Man (Power Level 84)</option>
-            <option value="black_panther">Black Panther (Power Level 86)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="sim-result-screen" id="simOutput">
-        [SYSTEM READY] Choose combatants and press "SIMULATE BATTLE" to calculate probability engine outcomes...
-      </div>
-    </div>
-
-    <!-- Leaderboard -->
-    <div class="section-header" id="standings">
-      <div>
-        <h2 class="section-title">Current Champion Rankings</h2>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">Overall points accumulated from battles, fan votes, and combat simulations.</p>
-      </div>
-    </div>
-
-    <div style="overflow-x: auto; margin-bottom: 5rem;">
-      <table class="leaderboard-table">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Champion</th>
-            <th>Affiliation</th>
-            <th>Win Ratio</th>
-            <th>Arena Rating</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="rank-num">#01</td>
-            <td><strong>Scarlet Witch (Wanda Maximoff)</strong></td>
-            <td>Avengers / Midnight Sons</td>
-            <td>94.2%</td>
-            <td class="power-score">2,980 PTS</td>
-          </tr>
-          <tr>
-            <td class="rank-num">#02</td>
-            <td><strong>Thor Odinson</strong></td>
-            <td>Asgardian Royal Court</td>
-            <td>91.7%</td>
-            <td class="power-score">2,840 PTS</td>
-          </tr>
-          <tr>
-            <td class="rank-num">#03</td>
-            <td><strong>Hulk (Bruce Banner)</strong></td>
-            <td>Avengers / Defenders</td>
-            <td>89.5%</td>
-            <td class="power-score">2,790 PTS</td>
-          </tr>
-          <tr>
-            <td class="rank-num">#04</td>
-            <td><strong>Spider-Man (Peter Parker)</strong></td>
-            <td>Web-Warriors</td>
-            <td>88.1%</td>
-            <td class="power-score">2,710 PTS</td>
-          </tr>
-          <tr>
-            <td class="rank-num">#05</td>
-            <td><strong>Black Panther (Shuri)</strong></td>
-            <td>Wakandan Design Group</td>
-            <td>85.4%</td>
-            <td class="power-score">2,630 PTS</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Agent Registration & Tournament Entry -->
-    <div class="section-header" id="register">
-      <div>
-        <h2 class="section-title">Agent Tournament Dossier</h2>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">Register your bracket forecast to win physical comics, signed art, and digital badges.</p>
-      </div>
-    </div>
-
-    <div class="register-wrapper">
-      <form id="contestForm" onsubmit="handleRegistration(event)">
-        <div class="form-group">
-          <label for="agentCallsign">Agent Callsign / Handle</label>
-          <input type="text" id="agentCallsign" class="form-control" placeholder="e.g. StarLord_99" required>
-        </div>
-
-        <div class="form-group">
-          <label for="agentEmail">SHIELD Encrypted Frequency (Email)</label>
-          <input type="email" id="agentEmail" class="form-control" placeholder="agent@shield.gov" required>
-        </div>
-
-        <div class="form-group">
-          <label>Choose Your Faction</label>
-          <div class="radio-pills">
-            <label class="radio-label">
-              <input type="radio" name="faction" value="Avengers" checked> Avengers
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="faction" value="X-Men"> X-Men
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="faction" value="Guardians"> Guardians
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="faction" value="Midnight Sons"> Midnight Sons
-            </label>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="championPick">Grand Champion Prediction</label>
-          <select id="championPick" class="form-control">
-            <option value="Scarlet Witch">Scarlet Witch</option>
-            <option value="Thor Odinson">Thor Odinson</option>
-            <option value="Iron Man">Iron Man</option>
-            <option value="Spider-Man">Spider-Man</option>
-            <option value="Doctor Strange">Doctor Strange</option>
-            <option value="Wolverine">Wolverine</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
-          <span>Submit Tactical Dossier</span>
-        </button>
-      </form>
-
-      <div class="briefing-card">
-        <div>
-          <h3 class="comic-title" style="font-size: 1.8rem; color: var(--gold); margin-bottom: 0.5rem;">Arena Directives</h3>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Classified Protocol Omega-7 authorized for all registered operatives.</p>
-          <ul class="briefing-rules">
-            <li>Voting updates in real-time. Only one vote permitted per matchup per cycle.</li>
-            <li>Predicting the exact margin in the Grand Finale yields a bonus 500 Arena points.</li>
-            <li>No Celestial tampering, Time Stones, or reality manipulation allowed on voting booths.</li>
-            <li>Winners announced during the live Multiverse Arena stream this Friday.</li>
-          </ul>
-        </div>
-        <div style="font-family: monospace; font-size: 0.8rem; color: var(--arc-blue); border-top: 1px dashed var(--surface-border); padding-top: 1rem;">
-          SHIELD SECURE LINK // ENCRYPTION AES-256 ACTIVE
         </div>
       </div>
     </div>
-
-  </div>
-
-  <!-- In-Page Custom Modal (No alert used) -->
-  <div class="modal-overlay" id="agentModal">
-    <div class="comic-modal">
-      <button class="modal-close-btn" onclick="closeModal()">&times;</button>
-      <div class="badge-stamp">DOSSIER VERIFIED</div>
-      <h2 class="comic-title" style="font-size: 2.4rem; color: #fff; margin-bottom: 0.5rem;" id="modalHero">
-        WELCOME, AGENT
-      </h2>
-      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;" id="modalDesc">
-        Your tournament entry has been broadcast to the Triskelion supercomputer.
-      </p>
-      <div style="background: #090c13; padding: 1rem; border: 1px solid var(--surface-border); margin-bottom: 1.5rem; text-align: left; font-family: monospace; font-size: 0.85rem;">
-        <div><strong>AGENT ID:</strong> <span id="modalAgentId" style="color: var(--arc-blue);">SHLD-000</span></div>
-        <div><strong>FACTION:</strong> <span id="modalFaction" style="color: var(--gold);">-</span></div>
-        <div><strong>PREDICTION:</strong> <span id="modalPick" style="color: var(--marvel-red);">-</span></div>
-      </div>
-      <button class="btn btn-primary" onclick="closeModal()" style="width: 100%; justify-content: center;">
-        <span>Return to Arena</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Notification Toast -->
-  <div class="toast" id="toast">
-    <span id="toastIcon">💥</span>
-    <span id="toastMsg">Action registered!</span>
-  </div>
-
-  <!-- Footer -->
-  <footer>
-    <div class="footer-logo">
-      <div class="marvel-badge" style="font-size: 1.6rem; display: inline-block;">MARVEL</div>
-    </div>
-    <p>Multiverse Championship &copy; 2026. Unofficial fan celebration competition.</p>
-    <p style="font-size: 0.8rem; margin-top: 0.5rem; color: #64748b;">All character trademarks, logos, and artwork are property of Marvel Characters, B.V.</p>
-  </footer>
+  </main>
 
   <script>
-    // Audio Synthesizer (Web Audio API)
-    let audioEnabled = true;
-    let audioCtx = null;
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        document.getElementById('upload-label').innerText = `Selected: ${file.name}`;
+        document.getElementById('video-placeholder').innerText = `[ Ready to process ${file.name} ]`;
       }
     }
 
-    function playComicSfx(type) {
-      if (!audioEnabled) return;
-      try {
-        initAudio();
-        if (audioCtx.state === 'suspended') {
-          audioCtx.resume();
-        }
-
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        const now = audioCtx.currentTime;
-
-        if (type === 'vote') {
-          // Energetic two-tone zap
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(320, now);
-          osc.frequency.exponentialRampToValueAtTime(740, now + 0.15);
-          gain.gain.setValueAtTime(0.15, now);
-          gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
-          osc.start(now);
-          osc.stop(now + 0.15);
-        } else if (type === 'clash') {
-          // Low punch rumble
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(140, now);
-          osc.frequency.exponentialRampToValueAtTime(40, now + 0.3);
-          gain.gain.setValueAtTime(0.3, now);
-          gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
-          osc.start(now);
-          osc.stop(now + 0.3);
-        } else if (type === 'success') {
-          // Cosmic chime
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(440, now);
-          osc.frequency.exponentialRampToValueAtTime(880, now + 0.25);
-          gain.gain.setValueAtTime(0.2, now);
-          gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
-          osc.start(now);
-          osc.stop(now + 0.25);
-        }
-      } catch (e) {
-        // AudioContext fallback
+    function updatePreview() {
+      const hookText = document.getElementById('hook-input').value;
+      const previewText = document.getElementById('preview-text');
+      if (hookText.trim() !== '') {
+        previewText.innerHTML = `"${hookText}"`;
+      } else {
+        previewText.innerHTML = `"Stop making this <b>#1 marketing mistake</b> if you want to grow!"`;
       }
     }
 
-    function toggleAudioFx() {
-      audioEnabled = !audioEnabled;
-      document.getElementById('soundState').innerText = audioEnabled ? 'ON' : 'OFF';
-      document.getElementById('soundIcon').innerText = audioEnabled ? '⚡' : '🔇';
-      showToast(audioEnabled ? 'Sound FX Activated!' : 'Sound FX Muted');
-    }
-
-    // Voting State Management
-    const votesData = {
-      1: { a: 3420, b: 3890 },
-      2: { a: 5110, b: 4720 },
-      3: { a: 6240, b: 5910 }
-    };
-    const userVoted = {};
-
-    function castVote(matchId, fighterSide, heroName) {
-      if (userVoted[matchId]) {
-        showToast(`You already cast your ballot for Match 0${matchId}!`);
-        return;
-      }
-
-      playComicSfx('vote');
-      userVoted[matchId] = fighterSide;
-      votesData[matchId][fighterSide] += 1;
-
-      // Update UI
-      const countEl = document.getElementById(`count-${matchId}-${fighterSide}`);
-      countEl.innerText = `${votesData[matchId][fighterSide].toLocaleString()} Votes`;
-
-      // Update Progress Bar
-      const total = votesData[matchId].a + votesData[matchId].b;
-      const pctA = Math.round((votesData[matchId].a / total) * 100);
-      const pctB = 100 - pctA;
-
-      document.getElementById(`prog-${matchId}-a`).style.width = pctA + '%';
-      document.getElementById(`prog-${matchId}-b`).style.width = pctB + '%';
-
-      // Mark selected card
-      const cardA = document.getElementById(`combatant-${matchId}-a`);
-      const cardB = document.getElementById(`combatant-${matchId}-b`);
-      if (fighterSide === 'a') cardA.classList.add('voted');
-      if (fighterSide === 'b') cardB.classList.add('voted');
-
-      showToast(`Vote locked for ${heroName}! Excelsior!`);
-    }
-
-    // Battle Simulator Logic
-    const heroStats = {
-      iron_man: { name: 'Iron Man', power: 88, desc: 'Repulsor arrays, Uni-Beam blasts, and adaptive nano-shields.' },
-      thor: { name: 'Thor Odinson', power: 96, desc: 'Summons Mjolnir lightning strikes and divine Asgardian resilience.' },
-      hulk: { name: 'The Hulk', power: 97, desc: 'Infinite gamma-fueled rage, earth-shaking shockwaves.' },
-      scarlet_witch: { name: 'Scarlet Witch', power: 99, desc: 'Hex bolts and reality-altering probability manipulation.' },
-      spider_man: { name: 'Spider-Man', power: 84, desc: 'Precise spider-sense precognition and high-velocity web traps.' },
-      black_panther: { name: 'Black Panther', power: 86, desc: 'Vibranium kinetic redirection suits and martial supremacy.' }
-    };
-
-    function runSimulation() {
-      const f1Key = document.getElementById('fighter1').value;
-      const f2Key = document.getElementById('fighter2').value;
-      const output = document.getElementById('simOutput');
-
-      if (f1Key === f2Key) {
-        output.innerText = `[COLLISION ERROR]\nA hero cannot battle their own variant in this sub-dimension! Select two distinct fighters.`;
-        return;
-      }
-
-      playComicSfx('clash');
-      output.innerText = `[CALCULATING TRAJECTORIES] Running 10,000 algorithmic encounters...`;
-
-      setTimeout(() => {
-        const h1 = heroStats[f1Key];
-        const h2 = heroStats[f2Key];
-
-        // Probabilistic outcome based on base rating with random variance
-        const roll1 = h1.power + Math.floor(Math.random() * 15);
-        const roll2 = h2.power + Math.floor(Math.random() * 15);
-
-        let winner = roll1 >= roll2 ? h1 : h2;
-        let loser = roll1 >= roll2 ? h2 : h1;
-        let diff = Math.abs(roll1 - roll2);
-
-        let narrative = `>>> SIMULATION COMPLETE <<<\n\n`;
-        narrative += `ARENA SUMMARY: ${h1.name} vs ${h2.name}\n`;
-        narrative += `CLASH TACTICS: ${winner.desc}\n\n`;
-        narrative += `OUTCOME: ${winner.name.toUpperCase()} PREVAILS with a +${diff} tactical advantage!\n`;
-        narrative += `Calculated Win Probability: ${Math.min(94, Math.max(55, 50 + diff * 2.5))}% in standard dimension.`;
-
-        output.innerText = narrative;
-      }, 500);
-    }
-
-    // Agent Registration Handler (No alert)
-    function handleRegistration(e) {
-      e.preventDefault();
-      playComicSfx('success');
-
-      const callsign = document.getElementById('agentCallsign').value;
-      const faction = document.querySelector('input[name="faction"]:checked').value;
-      const pick = document.getElementById('championPick').value;
-
-      const randomId = 'SHLD-' + Math.floor(1000 + Math.random() * 9000);
-
-      document.getElementById('modalHero').innerText = `AGENT: ${callsign.toUpperCase()}`;
-      document.getElementById('modalAgentId').innerText = randomId;
-      document.getElementById('modalFaction').innerText = faction;
-      document.getElementById('modalPick').innerText = pick;
-
-      document.getElementById('agentModal').classList.add('active');
-    }
-
-    function closeModal() {
-      document.getElementById('agentModal').classList.remove('active');
-      showToast('SHIELD Dossier safely encrypted in database!');
-    }
-
-    // Toast Alert Helper
-    let toastTimeout;
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      document.getElementById('toastMsg').innerText = msg;
-      toast.classList.add('show');
-
-      clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove('show');
-      }, 3000);
-    }
+    document.getElementById('generate-btn').addEventListener('click', () => {
+      alert('Generating your Instagram Reel! Extracted hooks, added smart captions, and optimized format.');
+    });
   </script>
 </body>
 </html>
