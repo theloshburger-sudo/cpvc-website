@@ -295,7 +295,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.5rem;
     }
 
     @media (max-width: 600px) {
@@ -338,6 +338,63 @@
     .chip-meta {
       font-size: 0.72rem;
       color: var(--text-muted);
+    }
+
+    /* Custom Importer Box (New Feature) */
+    .importer-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .importer-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .importer-input {
+      flex: 1;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.85rem;
+    }
+
+    .importer-input:focus {
+      outline: none;
+      border-color: var(--spotify-green);
+    }
+
+    .file-upload-label {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .file-upload-label:hover {
+      background: var(--bg-surface-active);
+      border-color: var(--border-highlight);
+    }
+
+    #customFileInput {
+      display: none;
     }
 
     /* Audio Input Box */
@@ -1113,7 +1170,7 @@
 
         <!-- Preset Selection (Proof of Concept) -->
         <div class="section-label">
-          <span>1. Select Demo Audio Channel / Context</span>
+          <span>1. Select Demo Audio Channel or Import Media</span>
           <span>Target Niche</span>
         </div>
 
@@ -1135,6 +1192,24 @@
             <div class="chip-title">⚡ Tech / AI Cast</div>
             <div class="chip-meta">Silicon Valley & Neural Chips</div>
           </button>
+        </div>
+
+        <!-- NEW: YouTube Link or MP3 File Upload Importer -->
+        <div class="importer-box">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #fff; margin-bottom: 4px;">
+            🔗 Or Import Your Own Audio / Link
+          </div>
+          <div class="importer-row">
+            <input type="text" id="mediaUrlInput" class="importer-input" placeholder="Paste YouTube URL or Podcast RSS link..." />
+            <button class="btn-secondary" style="padding: 9px 14px; font-size: 0.8rem;" onclick="importFromUrl()">Import</button>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+            <label class="file-upload-label" for="customFileInput">
+              <span>📂 Upload MP3 / WAV / M4A</span>
+            </label>
+            <input type="file" id="customFileInput" accept="audio/*,video/*" onchange="handleFileUpload(event)" />
+            <span id="uploadStatusText" style="font-size: 0.72rem; color: var(--text-muted);">No file selected</span>
+          </div>
         </div>
 
         <!-- Audio Dropzone & Stems Display -->
@@ -1595,6 +1670,82 @@
       playBeep(key === 'music' ? 140 : key === 'tech' ? 440 : 220);
     }
 
+    /* Handle Custom File Upload (.mp3 / .wav) */
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const statusText = document.getElementById('uploadStatusText');
+      statusText.textContent = `Analyzing: ${file.name}`;
+
+      // Create custom dynamic preset based on uploaded file name
+      const cleanName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+      
+      PRESETS['customUpload'] = {
+        title: `Custom Upload — ${cleanName}`,
+        sub: `${(file.size / (1024*1024)).toFixed(1)} MB • NLP Stem Extraction Complete`,
+        art: "🎙️",
+        creator: "@creator.vault",
+        handle: "Custom Audio Track",
+        explanation: "Audio parsed: Detected speech segments, background cadence, and tone clusters.",
+        relevance: "99.6% Relevance",
+        tags: [cleanName, "Custom Stems", "Speech Segmentation", "Viral Hook"],
+        audioTag: `${cleanName} • SyncReel Custom Import`,
+        caption: `Automated reel generation from uploaded clip: ${cleanName}. #contentcreator #reels #podcasting`,
+        lines: [
+          { text: "CUSTOM AUDIO IMPORT", punch: false, duration: 1500 },
+          { text: "STEMS EXTRACTED INSTANTLY", punch: true, duration: 1400 },
+          { text: "MATCHED TO 4K B-ROLL", punch: false, duration: 1500 },
+          { text: "READY FOR TIKTOK & IG", punch: true, duration: 1600 }
+        ],
+        visualType: "cyber"
+      };
+
+      setTimeout(() => {
+        statusText.textContent = `✅ Ready: ${file.name}`;
+        loadPreset('customUpload');
+      }, 600);
+    }
+
+    /* Import from YouTube URL / Podcast Link */
+    function importFromUrl() {
+      const urlInput = document.getElementById('mediaUrlInput');
+      const val = urlInput.value.trim();
+      if (!val) {
+        alert('Please enter a valid YouTube or podcast link.');
+        return;
+      }
+
+      const statusText = document.getElementById('uploadStatusText');
+      statusText.textContent = `Fetching link metadata...`;
+
+      PRESETS['urlImport'] = {
+        title: `Imported Stream — ${val.substring(0, 30)}...`,
+        sub: `Cloud Transcriber • 48 kHz Stem Isolation`,
+        art: "🔗",
+        creator: "@link.creator",
+        handle: "External Link Source",
+        explanation: "Audio parsed from remote link: Extracted primary monologue & speech rhythm.",
+        relevance: "99.7% Relevance",
+        tags: ["External Stream", "Cloud Audio", "NLP Verified", "AI Subtitles"],
+        audioTag: `Imported Audio Stream • SyncReel Cloud`,
+        caption: `Instant highlights extracted from remote stream link... #podcastclips #viralvideo`,
+        lines: [
+          { text: "REMOTE STREAM IMPORTED", punch: false, duration: 1500 },
+          { text: "AI SENTENCE SEGMENTATION", punch: true, duration: 1400 },
+          { text: "HIGH RETENTION HOOK CUT", punch: false, duration: 1500 },
+          { text: "PUBLISH READY", punch: true, duration: 1600 }
+        ],
+        visualType: "cinema"
+      };
+
+      setTimeout(() => {
+        statusText.textContent = `✅ Link Imported Successfully`;
+        urlInput.value = '';
+        loadPreset('urlImport');
+      }, 800);
+    }
+
     /* Subtitle / Caption Cycler */
     function showNextCaption() {
       clearTimeout(captionTimer);
@@ -1858,7 +2009,6 @@
     }
 
     function switchSpeed() {
-      // Toggle speed feedback
       const btn = event.currentTarget;
       if (btn.innerText.includes('1.0x')) {
         btn.innerHTML = '<span>⚡ 1.5x Speed</span>';
@@ -1898,7 +2048,6 @@
         }, 2400);
       }
 
-      // Re-trigger reel playback fresh
       captionIndex = 0;
       showNextCaption();
     }
